@@ -5,7 +5,35 @@ function PostCard({ userId, content, featuredImage, time }) {
   const [fileUrl, setfileUrl] = useState(null);
 const [fullscreen, setFullscreen] = useState(null);
 const [userData, setuserData] = useState(null)
+const [timeAgo, settimeAgo] = useState(null)
   useEffect(() => {
+  const getTimeAgo = (updatedAt) => {
+  const updatedDate = new Date(updatedAt);
+  const now = new Date();
+
+  const diffMs = now - updatedDate;
+  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+  const diffDays = Math.floor(diffHours / 24);
+
+  if (diffHours < 1) {
+    const diffMinutes = Math.floor(diffMs / (1000 * 60));
+    return diffMinutes <= 1 ? "just now" : `${diffMinutes}m`;
+  } 
+  else if (diffHours < 24) {
+    return `${diffHours}h`;
+  } 
+  else if (diffDays < 7) {
+    return `${diffDays}d`;
+  } 
+  else {
+    return updatedDate.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric"
+    }); // e.g. "22 Oct 2025"
+  }
+}
+settimeAgo(getTimeAgo(time))
     const fetchData = async () => {
       if (featuredImage) {
         try {
@@ -77,7 +105,7 @@ const [userData, setuserData] = useState(null)
                 />
               </svg>
               <span className="text-gray-500 font-light text-sm">
-                @{userData?.username} • 21h
+                @{userData?.username} • {timeAgo}
               </span>
             </div>
           </div>

@@ -38,7 +38,7 @@ function Feed() {
         {Posts && Posts.length > 0 ? (
             Posts.map((post)=>(
                 <div key={post.$id}>
-                    <PostCard content={post.content} featuredImage={post.featuredImage} userId={post.userId} />
+                    <PostCard content={post.content} featuredImage={post.featuredImage} userId={post.userId} time ={post.$updatedAt} />
                 </div>
             ))
         ) : null}
