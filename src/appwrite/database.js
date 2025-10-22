@@ -13,7 +13,7 @@ class AppwriteService {
     try {
       return await this.tablesDB.createRow({
         databaseId: conf.DATABASE_ID,
-        tableId: conf.TABLE_ID,
+        tableId: conf.POSTS_ID,
         rowId: ID.unique(),
         data: { content, featuredImage, userId },
       });
@@ -25,7 +25,7 @@ class AppwriteService {
     try {
       return await this.tablesDB.deleteRow({
         databaseId: conf.DATABASE_ID,
-        tableId: conf.TABLE_ID,
+        tableId: conf.POSTS_ID,
         rowId: postId,
       });
     } catch (error) {
@@ -36,7 +36,7 @@ class AppwriteService {
     try {
       return await this.tablesDB.updateRow({
         databaseId: conf.DATABASE_ID,
-        tableId: conf.TABLE_ID,
+        tableId: conf.POSTS_ID,
         rowId: postId,
         data: { content, featuredImage },
       });
@@ -48,7 +48,7 @@ class AppwriteService {
     try {
       return await this.tablesDB.getRow({
         databaseId: conf.DATABASE_ID,
-        tableId: conf.TABLE_ID,
+        tableId: conf.POSTS_ID,
         rowId: postId,
       });
     } catch (error) {
@@ -59,7 +59,7 @@ class AppwriteService {
     try {
       return await this.tablesDB.listRows({
         databaseId: conf.DATABASE_ID,
-        tableId: conf.TABLE_ID,
+        tableId: conf.POSTS_ID,
       });
     } catch (error) {
       console.log("Error while fetching all posts", error);
@@ -109,7 +109,30 @@ class AppwriteService {
     }
   }
   // user db
-
+  async createUser(username, email,name) {
+    try {
+      return await this.tablesDB.createRow({
+        databaseId: conf.DATABASE_ID,
+        tableId: conf.USERS_ID,
+        rowId: username,
+        data: { name,email,username },
+      });
+    } catch (error) {
+      console.log("Error while creating user", error);
+    } 
+  }
+ async getUser(username) {
+    try {
+      return await this.tablesDB.getRow({
+        databaseId: conf.DATABASE_ID,
+        tableId: conf.USERS_ID,
+        rowId: username,
+      });
+    } catch (error) {
+      console.log("Error while fetching user", error);
+      return true
+    }
+ }
 }
 const appwriteDBservice = new AppwriteService();
 export const client = appwriteDBservice.client;

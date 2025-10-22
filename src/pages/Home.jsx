@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import authService from "../appwrite/auth";
+import dbService from "../appwrite/database";
 import { login, logout } from "../app/features/authSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -11,15 +12,19 @@ import Feed from "./Feed";
 function Home() {
   const nav = useNavigate();
   const dispatch = useDispatch();
-  const [user, setuser] = useState(null);
+  const [userData, setuserData] = useState(null)
   useEffect(() => {
     const fetchUser = async () => {
       const res = await authService.getCurrentUser();
       console.log(res);
-      res.email ? setuser(res.email) : null;
+      res ? setuserData(res) : nav("/login"); 
+      const userInfo =  await dbService.getUser(res.$id);
+      console.log(userInfo);
+      userInfo ? setuserData(userInfo) : nav("/login");
     };
     fetchUser();
   }, [nav]);
+  
   const handleSubmit = () => {
     try {
       authService.logout().then(() => {
@@ -95,7 +100,7 @@ function Home() {
           </button>
 
           <div className="flex flex-col gap-2 absolute bottom-3">
-            <button className="bg-[#f54122] text-white  rounded-full h-13 font-bold hidden xl:block" onClick={handleSubmit}>
+            <button className="bg-[#f54122] text-white w-full rounded-full h-13 font-bold hidden xl:block" onClick={handleSubmit}>
               Logout
             </button>
             <div className=" flex text-white items-center py-2 pr-4 pl-2 gap-3 hover:bg-gray-900 hover:rounded-full">
@@ -105,8 +110,8 @@ function Home() {
                 alt="profile-picture"
               />
               <div className="flex-col text-white hidden xl:flex">
-                <span className="font-semibold">Piyush</span>
-                <span className="text-gray-500">@piyushbalambiya</span>
+                <span className="font-semibold">{userData?.name}</span>
+                <span className="text-gray-500">@{userData?.username}</span>
               </div>
             </div>
           </div>

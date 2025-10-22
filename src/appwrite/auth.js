@@ -9,9 +9,9 @@ class AppwriteService {
     this.databases = new Databases(this.client);
     this.storage = new Storage(this.client);
   }
-  async signup(email, password) {
+  async signup(email, password,username) {
     try {
-        return await this.account.create({userId:ID.unique(),email, password});
+        return await this.account.create({userId:username,email, password});
     } catch (error) {
      console.log("Error while creating account",error);
     }
