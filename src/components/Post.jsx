@@ -12,21 +12,47 @@ function Post() {
     watch,
   } = useForm();
   const [err, seterr] = useState(null);
+  const [userData, setuserData] = useState(null)
   const [user, setuser] = useState(null);
   const [successMsg, setSuccessMsg] = useState(null);
   const watchedFile = watch("file");
+  // Fetch current user
   useEffect(() => {
-    const getUser = async () => {
+    const fetchUser = async () => {
       try {
         const currentUser = await authService.getCurrentUser();
         setuser(currentUser);
       } catch (error) {
-        console.log("Error while fetching user:", error);
+        console.log("Error fetching user:", error);
+      }
+    };
+    fetchUser();
+  }, []);
+
+  // Fetch user data once user is available
+  useEffect(() => {
+    if (!user) return;
+
+    const fetchUserData = async () => {
+      try {
+        const userInfo = await dbService.getUser(user.$id);
+        setuserData(userInfo || null);
+
+        if (userInfo?.profilePicture) {
+          try {
+            const profilePictureUrl = await dbService.getFile(userInfo.profilePicture);
+            setuserData((prev) => ({ ...prev, profilePictureUrl }));
+          } catch (error) {
+            console.log("Error fetching profile picture:", error);
+          }
+        }
+      } catch (error) {
+        console.log("Error fetching user data:", error);
       }
     };
 
-    getUser();
-  }, []);
+    fetchUserData();
+  }, [user]);
 
   const Submit = async (data) => {
     if (data.content || (data.file && data.file.length > 0)) {
@@ -78,7 +104,7 @@ function Post() {
         <div>
           <img
             className="rounded-full w-12"
-            src="https://pbs.twimg.com/profile_images/1814599205828108288/B1nEe-QQ_400x400.jpg"
+            src={userData?.profilePictureUrl}
             alt="profile-picture"
           />
         </div>
@@ -86,7 +112,7 @@ function Post() {
         <div className="flex flex-col gap-7 pt-2 w-full items-start">
           <input
             type="text"
-            placeholder="What's happening?"
+            placeholder={`Hey ${userData?.name}.. what's happening `}
             {...register("content")}
             className="placeholder:text-gray-500 w-full focus:outline-none focus:ring-0 placeholder:text-xl bg-transparent"
           />

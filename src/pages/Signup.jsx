@@ -110,6 +110,10 @@ function Signup() {
                       type="text"
                       placeholder="Choose a username"
                       {...register("username", { required: true })}
+                      onChange={(e) => {
+                        const formatted = e.target.value.replace(/\s+/g, "").toLowerCase();
+                        e.target.value = formatted;
+                      }}
                     />
                     <span className="absolute right-3 top-2">
                       {loading && <span>⏳</span>}

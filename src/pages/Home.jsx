@@ -8,6 +8,7 @@ import Logo from "../components/Logo";
 import Post from "../components/Post";
 import PostCard from "../components/PostCard";
 import Feed from "./Feed";
+import noDp from "../assets/no_dp.png";
 
 function Home() {
   const nav = useNavigate();
@@ -21,6 +22,18 @@ function Home() {
       const userInfo =  await dbService.getUser(res.$id);
       console.log(userInfo);
       userInfo ? setuserData(userInfo) : nav("/login");
+      if(userInfo.profilePicture){
+        const profilePictureUrl = await dbService.getFile(userInfo.profilePicture);
+        setuserData((prevData) => ({
+          ...prevData,
+          profilePictureUrl: profilePictureUrl,
+        }));
+      }else{
+        setuserData((prevData) => ({
+          ...prevData,
+          profilePictureUrl: noDp,
+        }));
+      }
     };
     fetchUser();
   }, [nav]);
@@ -39,7 +52,7 @@ function Home() {
   
   return (
     <div className="flex w-[75vw] h-auto mx-auto text-white">
-      <div className="left w-[25%] flex flex-col">
+      <div className="left w-[25%] flex flex-col relative">
         <div className="logo flex  items-center ">
           <Logo w="w-20 object cover" />
           <h1 className="font-semibold text-3xl">Xblog</h1>{" "}
@@ -99,14 +112,14 @@ function Home() {
             Post
           </button>
 
-          <div className="flex flex-col gap-2 absolute bottom-3">
+          <div className="flex flex-col gap-2 w-[87%] absolute bottom-3">
             <button className="bg-[#f54122] text-white w-full rounded-full h-13 font-bold hidden xl:block" onClick={handleSubmit}>
               Logout
             </button>
             <div className=" flex text-white items-center py-2 pr-4 pl-2 gap-3 hover:bg-gray-900 hover:rounded-full">
               <img
                 className="w-10 rounded-full"
-                src="https://pbs.twimg.com/profile_images/1814599205828108288/B1nEe-QQ_400x400.jpg"
+                src={userData?.profilePictureUrl}
                 alt="profile-picture"
               />
               <div className="flex-col text-white hidden xl:flex">

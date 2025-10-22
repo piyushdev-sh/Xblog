@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { get } from "react-hook-form";
 import dbService from "../appwrite/database";
 
 function PostCard({ userId, content, featuredImage, time }) {
   const [fileUrl, setfileUrl] = useState(null);
 const [fullscreen, setFullscreen] = useState(null);
+const [userData, setuserData] = useState(null)
   useEffect(() => {
     const fetchData = async () => {
       if (featuredImage) {
@@ -18,7 +18,24 @@ const [fullscreen, setFullscreen] = useState(null);
       } else {
         setfileUrl(null);
       }
-      // Fetch user data based on userId if needed
+    const fetchUserData = async () => {
+      try {
+        const userInfo =  await dbService.getUser(userId);
+        console.log(userInfo);
+        userInfo ? setuserData(userInfo) : setuserData(null);
+        if(userInfo.profilePicture){
+          const profilePictureUrl = await dbService.getFile(userInfo.profilePicture);
+          setuserData((prevData) => ({
+            ...prevData,
+            profilePictureUrl: profilePictureUrl,
+          }));
+        }
+
+      } catch (error) {
+        console.log("Error while fetching user data", error); 
+      }
+    }
+    fetchUserData();
     };
     fetchData();
   }, []);
@@ -42,13 +59,13 @@ const [fullscreen, setFullscreen] = useState(null);
       <div className="flex gap-2 p-2 items-start w-full">
         <img
           className="rounded-full w-10"
-          src="https://pbs.twimg.com/profile_images/1814599205828108288/B1nEe-QQ_400x400.jpg"
+          src={userData?.profilePictureUrl}
           alt="profile-picture"
         />
         <div className="w-[90%] flex flex-col">
           <div className="flex justify-between w-full">
             <div className="text-white flex items-center gap-1 font-semibold">
-              wono
+              {userData ? userData.name : "Unknown User"}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 22 22"
@@ -60,7 +77,7 @@ const [fullscreen, setFullscreen] = useState(null);
                 />
               </svg>
               <span className="text-gray-500 font-light text-sm">
-                @wono_strategy • 21h
+                @{userData?.username} • 21h
               </span>
             </div>
           </div>
