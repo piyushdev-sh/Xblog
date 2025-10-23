@@ -1,5 +1,5 @@
 import conf from "../../conf";
-import { ID, TablesDB, Storage } from "appwrite";
+import { ID, TablesDB, Storage, Query } from "appwrite";
 import { Client } from "appwrite";
 
 class AppwriteService {
@@ -63,6 +63,17 @@ class AppwriteService {
       });
     } catch (error) {
       console.log("Error while fetching all posts", error);
+    }
+  }
+  async getPostsByUser(userId) {
+    try {
+      return await this.tablesDB.listRows({
+        databaseId: conf.DATABASE_ID,
+        tableId: conf.POSTS_ID,
+        queries: [Query.equal("userId", userId)],
+      });
+    } catch (error) {
+      console.log("Error while fetching user's posts", error);  
     }
   }
   // file upload

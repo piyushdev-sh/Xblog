@@ -10,6 +10,7 @@ import Login from "./pages/Login.jsx";
 import Signup from "./pages/Signup.jsx";
 import Home from "./pages/Home.jsx";
 import Profile from "./pages/Profile.jsx";
+import Feed from "./pages/Feed.jsx";
 
 const router = createBrowserRouter([
   {
@@ -18,8 +19,11 @@ const router = createBrowserRouter([
     children: [
       { path: "/login", element: <Login /> },
       { path: "/signup",element: <Signup /> },
-      { path: "/home", element: <Home /> },
-      { path: "/profile/:id", element: <Profile /> },
+      { path: "/home", element: <Home /> ,children:[
+        { path: "/home" , element: <Feed/>},
+        { path: "/home/profile/:username", element: <Profile /> },
+      ]},
+      
     ],
   },
 ]);

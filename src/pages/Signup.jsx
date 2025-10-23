@@ -93,6 +93,15 @@ function Signup() {
                     type="text"
                     placeholder="Enter your name"
                     {...register("name", { required: true })}
+                    onChange={(e) => {
+                      const formatted = e.target.value
+                        .replace(/\s+/g, " ")
+                        .trimStart();
+                      e.target.value = formatted
+                        .split(" ")
+                        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                        .join(" ");
+                    }}
                   />
                 </div>
                 <div className="username flex flex-col gap-1">

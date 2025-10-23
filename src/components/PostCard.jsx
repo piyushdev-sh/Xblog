@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import dbService from "../appwrite/database";
+import { useNavigate } from "react-router-dom";
 
 function PostCard({ userId, content, featuredImage, time }) {
+const nav = useNavigate()
   const [fileUrl, setfileUrl] = useState(null);
 const [fullscreen, setFullscreen] = useState(null);
 const [userData, setuserData] = useState(null)
@@ -67,6 +69,13 @@ settimeAgo(getTimeAgo(time))
     };
     fetchData();
   }, []);
+  const deletePost = async () => {
+    try {
+      const deleted = await dbService.deletePost(postId);
+    } catch (error) {
+      
+    }
+  }
   return (
     <div>
         {fullscreen && (
@@ -89,10 +98,11 @@ settimeAgo(getTimeAgo(time))
           className="rounded-full w-10"
           src={userData?.profilePictureUrl}
           alt="profile-picture"
+          onClick={()=> nav(`/home/profile/${userData?.username}`)}
         />
         <div className="w-[90%] flex flex-col">
           <div className="flex justify-between w-full">
-            <div className="text-white flex items-center gap-1 font-semibold">
+            <div onClick={()=> nav(`/home/profile/${userData?.username}`)} className="text-white flex items-center gap-1 font-semibold">
               {userData ? userData.name : "Unknown User"}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -108,6 +118,24 @@ settimeAgo(getTimeAgo(time))
                 @{userData?.username} • {timeAgo}
               </span>
             </div>
+              <button
+                onClick={deletePost}
+                className="text-gray-500 hover:text-red-500 transition"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M6 7a1 1 0 011-1h10a1 1 0 011 1v12a2 2 0 01-2 2H8a2 2 0 01-2-2V7zm3 2a1 1 0 00-1 1v7a1 1 0 102 0v-7a1 1 0 00-1-1zm4 0a1 1 0 00-1 1v7a1 1 0 102 0v-7a1 1 0 00-1-1z"
+                    clipRule="evenodd"
+                  />
+                  <path d="M4 5h16v2H4V5z" />
+                </svg>
+              </button>
           </div>
           <span className="text-white font-sans text-[15px]">{content}</span>
           {fileUrl && (

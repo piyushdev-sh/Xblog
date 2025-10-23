@@ -31,7 +31,7 @@ function App() {
     };
     checkUser();
   }, []);
-  return <div className="bg-black w-screen h-screen"> <Outlet /></div>
+  return <div className="bg-black w-screen h-screen"><Outlet /></div>
 }
 
 export default App;

@@ -3,6 +3,7 @@ import dbService , {client} from "../appwrite/database";
 import authService from "../appwrite/auth";
 import PostCard from "../components/PostCard";
 import env from "../../conf";
+import Post from "../components/Post";
 
 function Feed() {
   const [Posts, setPosts] = useState(null);
@@ -35,6 +36,8 @@ function Feed() {
 
   return(
     <div>
+    <Post/>
+    <div>
         {Posts && Posts.length > 0 ? (
             Posts.map((post)=>(
                 <div key={post.$id}>
@@ -42,7 +45,7 @@ function Feed() {
                 </div>
             ))
         ) : null}
-    </div>
+    </div></div>
   )
 }
 

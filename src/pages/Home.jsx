@@ -3,14 +3,16 @@ import authService from "../appwrite/auth";
 import dbService from "../appwrite/database";
 import { login, logout } from "../app/features/authSlice";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import Logo from "../components/Logo";
 import Post from "../components/Post";
 import PostCard from "../components/PostCard";
 import Feed from "./Feed";
 import noDp from "../assets/no_dp.png";
+import { useLocation } from "react-router-dom";
 
 function Home() {
+  const location = useLocation();
   const nav = useNavigate();
   const dispatch = useDispatch();
   const [userData, setuserData] = useState(null)
@@ -95,7 +97,7 @@ function Home() {
               </svg>
               <span className="hidden text-black xl:block">Bookmarks</span>
             </li>
-            <li className="invert font-sans flex gap-4 py-2 pr-4 ml-4 pl-2 leading-[24px] items-center text-xl w-fit hover:bg-gray-200 hover:rounded-full">
+            <li onClick={()=> nav(`/home/profile/${userData?.username}`)} className="invert font-sans flex gap-4 py-2 pr-4 ml-4 pl-2 leading-[24px] items-center text-xl w-fit hover:bg-gray-200 hover:rounded-full">
               <svg
                 viewBox="0 0 24 24"
                 aria-hidden="true"
@@ -132,9 +134,7 @@ function Home() {
       </div>
 
       <div className="right overflow-auto border-[#2f3336] pb-10 border-b-0 border-t-0 w-[75%] h-screen overflow-x-hidden scroll-smooth  border">
-       
-       <Post/>
-      <Feed/>
+      <Outlet/>
       </div>
     </div>
   );
