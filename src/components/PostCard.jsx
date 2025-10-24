@@ -1,13 +1,25 @@
 import React, { useEffect, useState } from "react";
 import dbService from "../appwrite/database";
+import authService from "../appwrite/auth";
 import { useNavigate } from "react-router-dom";
 
-function PostCard({ userId, content, featuredImage, time }) {
+function PostCard({ postId,userId, content, featuredImage, time }) {
 const nav = useNavigate()
   const [fileUrl, setfileUrl] = useState(null);
 const [fullscreen, setFullscreen] = useState(null);
 const [userData, setuserData] = useState(null)
 const [timeAgo, settimeAgo] = useState(null)
+const [Owner, setOwner] = useState(null)
+const [showMenu, setShowMenu] = useState(false)
+const deletePost = async () => {
+    try {
+    if(featuredImage){
+      const imgDeleted = await dbService.deleteFile(featuredImage);}
+      const deleted = await dbService.deletePost(postId);
+    } catch (error) {
+      console.log("Error while deleting post", error);
+    }
+  }
   useEffect(() => {
   const getTimeAgo = (updatedAt) => {
   const updatedDate = new Date(updatedAt);
@@ -62,20 +74,24 @@ settimeAgo(getTimeAgo(time))
         }
 
       } catch (error) {
-        console.log("Error while fetching user data", error); 
+        console.log("Error while fetching user data", error);
       }
     }
     fetchUserData();
     };
+    const fetchUserData = async () => {
+      try {
+        const currentUser = await authService.getCurrentUser();
+        if(currentUser.$id === userId){
+          setOwner(true);
+        }
+      } catch (error) {
+        
+      }
+    }
+    fetchUserData();
     fetchData();
   }, []);
-  const deletePost = async () => {
-    try {
-      const deleted = await dbService.deletePost(postId);
-    } catch (error) {
-      
-    }
-  }
   return (
     <div>
         {fullscreen && (
@@ -118,24 +134,36 @@ settimeAgo(getTimeAgo(time))
                 @{userData?.username} • {timeAgo}
               </span>
             </div>
-              <button
-                onClick={deletePost}
-                className="text-gray-500 hover:text-red-500 transition"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M6 7a1 1 0 011-1h10a1 1 0 011 1v12a2 2 0 01-2 2H8a2 2 0 01-2-2V7zm3 2a1 1 0 00-1 1v7a1 1 0 102 0v-7a1 1 0 00-1-1zm4 0a1 1 0 00-1 1v7a1 1 0 102 0v-7a1 1 0 00-1-1z"
-                    clipRule="evenodd"
-                  />
-                  <path d="M4 5h16v2H4V5z" />
-                </svg>
-              </button>
+              {Owner && (
+                <div className="relative">
+                  <button
+                    onClick={() => setShowMenu(!showMenu)}
+                    className="text-gray-500 transition"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
+                      <circle cx="5" cy="12" r="2" />
+                      <circle cx="12" cy="12" r="2" />
+                      <circle cx="19" cy="12" r="2" />
+                    </svg>
+                  </button>
+                  {showMenu && (
+                    <div className="absolute right-0 mt-2 w-32 bg-black text-white rounded-lg shadow-lg z-20">
+                      <button
+                        onClick={deletePost}
+                        className="block w-full text-left px-4 rounded-lg py-2 hover:bg-gray-700"
+                      >
+                        Delete Post
+                      </button>
+                      <button
+                        onClick={() => nav(`/edit/${postId}`)}
+                        className="block w-full text-left px-4 rounded-lg py-2 hover:bg-gray-700"
+                      >
+                        Edit Post
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
           </div>
           <span className="text-white font-sans text-[15px]">{content}</span>
           {fileUrl && (

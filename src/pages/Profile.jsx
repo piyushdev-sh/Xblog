@@ -1,6 +1,7 @@
 import React from "react"
 import { useParams, useNavigate } from "react-router-dom";
 import dbService from "../appwrite/database";
+import authService from "../appwrite/auth";
 import { useEffect } from "react";
 import { useState } from "react";
 import PostCard from "../components/PostCard";
@@ -16,9 +17,11 @@ function Profile() {
    try {
     const getCurrentUser = async () => {
       try {
-        const currentUser = await dbService.getCurrentUser();
-        if(currentUser.username === username){
+        const currentUser = await authService.getCurrentUser();
+        if(currentUser.$id === username){
           setOwner(true);
+        }else{
+          setOwner(false);
         }
       } catch (error) {
         console.log("Error fetching current user:", error);
@@ -49,7 +52,7 @@ function Profile() {
    } catch (error) {
     console.log("Error fetching user data:", error);
    }
-  }, [])
+  }, [navigate,username])
   
   return (
     <div >
@@ -84,7 +87,15 @@ function Profile() {
         />
       </div>
       <div className="edit flex justify-end p-4">
-        <button className="border font-semibold border-[#71797b] rounded-3xl py-1 px-5">Edit profile</button>
+        {Owner ? (
+          <button className="border font-semibold border-[#71797b] rounded-3xl py-1 px-5">
+            Edit profile
+          </button>
+        ) : (
+          <button className=" font-semibold bg-white text-black rounded-3xl py-1 px-5">
+            Follow
+          </button>
+        )}
       </div>
       <div className="detail pl-4 pt-4 gap-2 border border-t-0 border-l-0 border-r-0 border-b-[#2f3336] pb-6 flex flex-col">
         <div className="flex flex-col">
