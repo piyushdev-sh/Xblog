@@ -19,7 +19,6 @@ function Footer() {
     "Marketing",
     "X for Business",
     "Developers",
-    "Directory",
     "Settings",
   ];
 
