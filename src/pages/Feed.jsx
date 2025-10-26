@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { FaSpinner } from "react-icons/fa";
 import dbService , {client} from "../appwrite/database";
 import authService from "../appwrite/auth";
 import PostCard from "../components/PostCard";
@@ -7,14 +8,18 @@ import Post from "../components/Post";
 
 function Feed() {
   const [Posts, setPosts] = useState(null);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchPosts = async () => {
       try {
+        setLoading(true);
         const fetchedPosts = await dbService.getPosts();
         console.log("Fetched posts:", fetchedPosts);
         setPosts(fetchedPosts.rows);
       } catch (error) {
         console.log("Error while fetching posts", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -33,6 +38,15 @@ function Feed() {
 
     return () => unsubscribe && unsubscribe();
   }, []);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-black text-white">
+        <FaSpinner className="animate-spin text-4xl mr-3" />
+        <span className="text-xl font-semibold">Loading feed...</span>
+      </div>
+    );
+  }
 
   return(
     <div>

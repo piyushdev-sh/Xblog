@@ -11,6 +11,7 @@ import Signup from "./pages/Signup.jsx";
 import Home from "./pages/Home.jsx";
 import Profile from "./pages/Profile.jsx";
 import Feed from "./pages/Feed.jsx";
+import Post from "./components/Post.jsx";
 
 const router = createBrowserRouter([
   {
@@ -21,6 +22,7 @@ const router = createBrowserRouter([
       { path: "/signup",element: <Signup /> },
       { path: "/home", element: <Home /> ,children:[
         { path: "/home" , element: <Feed/>},
+        {path: "/home/post" , element: <Post/>},
         { path: "/home/profile/:username", element: <Profile /> },
       ]},
       

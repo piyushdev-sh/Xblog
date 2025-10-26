@@ -132,6 +132,18 @@ class AppwriteService {
       console.log("Error while creating user", error);
     } 
   }
+  async updateUser(id,data){
+    try {
+      return await this.tablesDB.updateRow({
+        databaseId : conf.DATABASE_ID,
+        tableId: conf.USERS_ID,
+        rowId : id,
+        data : data 
+      })
+    } catch (error) {
+      console.log("Error while updating user",error)
+    }
+  }
  async getUser(username) {
     try {
       return await this.tablesDB.getRow({

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import dbService from "../appwrite/database";
 import authService from "../appwrite/auth";
 import { useNavigate } from "react-router-dom";
+import { FaSpinner } from "react-icons/fa";
 
 function PostCard({ postId,userId, content, featuredImage, time }) {
 const nav = useNavigate()
@@ -11,6 +12,7 @@ const [userData, setuserData] = useState(null)
 const [timeAgo, settimeAgo] = useState(null)
 const [Owner, setOwner] = useState(null)
 const [showMenu, setShowMenu] = useState(false)
+const [loading, setLoading] = useState(true);
 const deletePost = async () => {
     try {
     if(featuredImage){
@@ -21,77 +23,77 @@ const deletePost = async () => {
     }
   }
   useEffect(() => {
-  const getTimeAgo = (updatedAt) => {
-  const updatedDate = new Date(updatedAt);
-  const now = new Date();
+    const fetchAllData = async () => {
+      try {
+        setLoading(true);
+        const getTimeAgo = (updatedAt) => {
+          const updatedDate = new Date(updatedAt);
+          const now = new Date();
 
-  const diffMs = now - updatedDate;
-  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-  const diffDays = Math.floor(diffHours / 24);
+          const diffMs = now - updatedDate;
+          const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+          const diffDays = Math.floor(diffHours / 24);
 
-  if (diffHours < 1) {
-    const diffMinutes = Math.floor(diffMs / (1000 * 60));
-    return diffMinutes <= 1 ? "just now" : `${diffMinutes}m`;
-  } 
-  else if (diffHours < 24) {
-    return `${diffHours}h`;
-  } 
-  else if (diffDays < 7) {
-    return `${diffDays}d`;
-  } 
-  else {
-    return updatedDate.toLocaleDateString("en-GB", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric"
-    }); // e.g. "22 Oct 2025"
-  }
-}
-settimeAgo(getTimeAgo(time))
-    const fetchData = async () => {
-      if (featuredImage) {
-        try {
-          const file = await dbService.getFile(featuredImage);
-          file ? setfileUrl(file) : setfileUrl(null);
-        } catch (error) {
-          console.error("Error fetching file:", error);
+          if (diffHours < 1) {
+            const diffMinutes = Math.floor(diffMs / (1000 * 60));
+            return diffMinutes <= 1 ? "just now" : `${diffMinutes}m`;
+          } 
+          else if (diffHours < 24) {
+            return `${diffHours}h`;
+          } 
+          else if (diffDays < 7) {
+            return `${diffDays}d`;
+          } 
+          else {
+            return updatedDate.toLocaleDateString("en-GB", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric"
+            }); // e.g. "22 Oct 2025"
+          }
+        }
+        settimeAgo(getTimeAgo(time));
+        if (featuredImage) {
+          try {
+            const file = await dbService.getFile(featuredImage);
+            file ? setfileUrl(file) : setfileUrl(null);
+          } catch (error) {
+            console.error("Error fetching file:", error);
+            setfileUrl(null);
+          }
+        } else {
           setfileUrl(null);
         }
-      } else {
-        setfileUrl(null);
-      }
-    const fetchUserData = async () => {
-      try {
         const userInfo =  await dbService.getUser(userId);
         console.log(userInfo);
-        userInfo ? setuserData(userInfo) : setuserData(null);
-        if(userInfo.profilePicture){
+        setuserData(userInfo || null);
+        if(userInfo && userInfo.profilePicture){
           const profilePictureUrl = await dbService.getFile(userInfo.profilePicture);
           setuserData((prevData) => ({
             ...prevData,
             profilePictureUrl: profilePictureUrl,
           }));
         }
-
-      } catch (error) {
-        console.log("Error while fetching user data", error);
-      }
-    }
-    fetchUserData();
-    };
-    const fetchUserData = async () => {
-      try {
         const currentUser = await authService.getCurrentUser();
         if(currentUser.$id === userId){
           setOwner(true);
         }
       } catch (error) {
-        
+        console.log(error);
+      } finally {
+        setLoading(false);
       }
     }
-    fetchUserData();
-    fetchData();
+    fetchAllData();
   }, []);
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-black text-white">
+        <FaSpinner className="animate-spin text-4xl mr-3" />
+        <span className="text-xl font-semibold">Loading post...</span>
+      </div>
+    );
+  }
   return (
     <div>
         {fullscreen && (

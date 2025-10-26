@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import dbService from "../appwrite/database";
 import authService from "../appwrite/auth";
 import { useForm } from "react-hook-form";
+import { FaSpinner } from "react-icons/fa";
 
-function Post() {
+function Post(props) {
   const {
     register,
     handleSubmit,
@@ -15,15 +16,19 @@ function Post() {
   const [userData, setuserData] = useState(null)
   const [user, setuser] = useState(null);
   const [successMsg, setSuccessMsg] = useState(null);
+  const [loading, setLoading] = useState(true);
   const watchedFile = watch("file");
   // Fetch current user
   useEffect(() => {
     const fetchUser = async () => {
       try {
+        setLoading(true);
         const currentUser = await authService.getCurrentUser();
         setuser(currentUser);
       } catch (error) {
         console.log("Error fetching user:", error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchUser();
@@ -35,6 +40,7 @@ function Post() {
 
     const fetchUserData = async () => {
       try {
+        setLoading(true);
         const userInfo = await dbService.getUser(user.$id);
         setuserData(userInfo || null);
 
@@ -48,6 +54,8 @@ function Post() {
         }
       } catch (error) {
         console.log("Error fetching user data:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -85,6 +93,16 @@ function Post() {
       setTimeout(() => seterr(null), 3000);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-black text-white">
+        <FaSpinner className="animate-spin text-4xl mr-3" />
+        <span className="text-xl font-semibold">Loading post...</span>
+      </div>
+    );
+  }
+
   return (
     <div>
       {successMsg && (
@@ -99,7 +117,7 @@ function Post() {
       )}
       <form
         onSubmit={handleSubmit(Submit)}
-        className="flex gap-3 p-5 border border-t-0 border-l-0 border-r-0 border-b-[#2f3336] items-start"
+        className="flex gap-3 p-5 border rounded-2xl bg-black border-t-0 border-l-0 border-r-0 border-b-[#2f3336] items-start"
       >
         <div>
           <img
