@@ -1,10 +1,10 @@
 import { Client,Account,Databases,Storage } from "appwrite";
-import env from "../../conf";
+import conf from "../../conf";
 import { ID } from "appwrite";
 class AppwriteService {
   constructor() {
     this.client = new Client();
-    this.client.setEndpoint(env.ENDPOINT_URL).setProject(env.PROJECT_ID);
+    this.client.setEndpoint(conf.ENDPOINT_URL).setProject(conf.PROJECT_ID);
     this.account = new Account(this.client);
     this.databases = new Databases(this.client);
     this.storage = new Storage(this.client);
