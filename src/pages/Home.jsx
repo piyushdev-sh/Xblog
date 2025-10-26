@@ -167,7 +167,7 @@ function Home() {
             <button className="bg-[#f54122] text-white w-full rounded-full h-13 font-bold hidden xl:block" onClick={handleSubmit}>
               Logout
             </button>
-            <div className=" flex text-white items-center py-2 pr-4 pl-2 gap-3 hover:bg-gray-900 hover:rounded-full">
+            <div onClick={()=> nav(`/home/profile/${userData?.username}`)} className=" flex text-white items-center py-2 pr-4 pl-2 gap-3 hover:bg-gray-900 hover:rounded-full">
               <img
                 className="w-10 rounded-full"
                 src={userData?.profilePictureUrl}
