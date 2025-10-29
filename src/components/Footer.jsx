@@ -23,7 +23,7 @@ function Footer() {
   ];
 
   return (
-    <footer className="flex flex-wrap justify-center gap-1 fixed text-xs text-gray-500 mb-2 bottom-0 w-full">
+    <footer className="flex flex-wrap justify-center gap-1 absolute text-xs text-gray-500 mb-2 bottom-0 w-full">
       {footerItems.map((item, index) => (
         <React.Fragment key={index}>
           <span className="cursor-pointer hover:underline">{item}</span>
