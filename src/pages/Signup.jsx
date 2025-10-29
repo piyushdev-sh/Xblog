@@ -64,19 +64,17 @@ function Signup() {
     }
   };
   return (
-    <div>
-      <div className="flex gap-3">
-        <div className="logo">
-          <Logo w="w-[720px] h-[778px] object-cover" />
-        </div>
+   <div className="flex relative flex-col gap-1 min-h-screen">
+      <div className="flex px-5 mb-30 md:mb-20 lg:mb-10 xl:mb-0 flex-1 w-full gap-3">
+        <div className="logo w-1/2 overflow-hidden justify-center items-center hidden md:flex">
+            <Logo w="scale-400" />
+          </div>
         <div className="loginRight mx-auto text-white">
-          <h1 className="text-white text-6xl font-bold mt-10 mb-15 text-[rgb(231, 233, 234)]">
-            X but not really..
-          </h1>
+           <h1 className='text-white text-5xl lg:text-6xl font-bold mt-10 mb-15 text-[rgb(231, 233, 234)]'>X but not really..</h1>
           <div className="text-2xl mb-2 font-semibold">
             Create your account.
           </div>
-          <div className="login my-10 w-100">
+          <div className="login my-10">
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="innerlogin flex flex-col gap-5">
                 <div className="name flex flex-col gap-1">
@@ -177,7 +175,7 @@ function Signup() {
               </div>
             </form>
           </div>
-          <div className="signup w-100 flex flex-col gap-3">
+          <div className="signup flex flex-col gap-3">
             <div className="text-center text-gray-400">
               Already have a account ?
             </div>
