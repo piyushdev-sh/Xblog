@@ -65,7 +65,7 @@ function Signup() {
   };
   return (
    <div className="flex relative flex-col gap-1 min-h-screen">
-      <div className="flex px-5 mb-30 md:mb-20 lg:mb-10 xl:mb-0 flex-1 w-full gap-3">
+      <div className="flex px-5 mb-35 md:mb-20 lg:mb-10 xl:mb-0 flex-1 w-full gap-3">
         <div className="logo w-1/2 overflow-hidden justify-center items-center hidden md:flex">
             <Logo w="scale-400" />
           </div>
