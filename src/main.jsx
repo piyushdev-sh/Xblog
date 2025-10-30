@@ -12,6 +12,8 @@ import Home from "./pages/Home.jsx";
 import Profile from "./pages/Profile.jsx";
 import Feed from "./pages/Feed.jsx";
 import Post from "./components/Post.jsx";
+import Explore from "./pages/Explore.jsx";
+import Bookmarks from "./pages/Bookmarks.jsx";
 
 const router = createBrowserRouter([
   {
@@ -23,6 +25,8 @@ const router = createBrowserRouter([
       { path: "/home", element: <Home /> ,children:[
         { path: "/home" , element: <Feed/>},
         {path: "/home/post" , element: <Post/>},
+        { path: "/home/explore", element: <Explore /> },
+        { path: "/home/bookmarks", element: <Bookmarks /> },
         { path: "/home/profile/:username", element: <Profile /> },
       ]},
       

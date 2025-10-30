@@ -192,12 +192,27 @@ async function Submit(data) {
       </div>
       <div className="edit flex justify-end p-4">
         {Owner ? (
-          <button
-            onClick={() => setviewEditProfile(true)}
-            className="border font-semibold border-[#71797b] rounded-3xl py-1 px-5"
-          >
-            Edit profile
-          </button>
+          <div className="flex flex-col gap-2">
+            <button
+              onClick={() => setviewEditProfile(true)}
+              className="border font-semibold border-[#71797b] rounded-3xl py-1 px-5"
+            >
+              Edit profile
+            </button>
+            <button
+              onClick={async () => {
+                try {
+                  await authService.logout();
+                  navigate("/");
+                } catch (error) {
+                  console.log("Logout failed:", error);
+                }
+              }}
+              className="bg-[#f54122] text-white font-semibold rounded-3xl py-2 px-6 hover:bg-[#e43a1f] transition-all"
+            >
+              Logout
+            </button>
+          </div>
         ) : (
           <button className=" font-semibold bg-white text-black rounded-3xl py-1 px-5">
             Follow
@@ -212,25 +227,34 @@ async function Submit(data) {
           </span>
         </div>
         <div className="bio">{userData?.bio}</div>
-        <div className="joined flex gap-1 text-[#71767b] font-medium">
+        <div className="joined flex gap-1 text-[#71767b] font-medium items-center">
           <svg
             viewBox="0 0 24 24"
             aria-hidden="true"
             fill="#71767b"
-            className="r-4qtqp9 invert w-5 r-yyyyoo r-1xvli5t r-dnmrzs r-bnwqim r-lrvibr r-m6rgpd r-1bwzh9t r-1gs4q39"
+            className="invert w-5"
           >
             <g>
               <path d="M7 4V3h2v1h6V3h2v1h1.5C19.89 4 21 5.12 21 6.5v12c0 1.38-1.11 2.5-2.5 2.5h-13C4.12 21 3 19.88 3 18.5v-12C3 5.12 4.12 4 5.5 4H7zm0 2H5.5c-.27 0-.5.22-.5.5v12c0 .28.23.5.5.5h13c.28 0 .5-.22.5-.5v-12c0-.28-.22-.5-.5-.5H17v1h-2V6H9v1H7V6zm0 6h2v-2H7v2zm0 4h2v-2H7v2zm4-4h2v-2h-2v2zm0 4h2v-2h-2v2zm4-4h2v-2h-2v2z"></path>
             </g>
           </svg>
-          Joined November 2021
+          <span>
+            {userData?.$createdAt
+              ? `Joined ${new Date(userData.$createdAt).toLocaleString("default", {
+                  month: "long",
+                  year: "numeric",
+                })}`
+              : ""}
+          </span>
         </div>
         <div className="follow flex gap-10">
           <div className="flex font-semibold gap-1">
-            218<span className="text-[#71767b] font-medium ">Following</span>
+            {Array.isArray(userData?.following) ? userData.following.length : 0}
+            <span className="text-[#71767b] font-medium"> Following</span>
           </div>
           <div className="flex font-semibold gap-1">
-            6<span className="text-[#71767b] font-medium">Followers</span>
+            {Array.isArray(userData?.followers) ? userData.followers.length : 0}
+            <span className="text-[#71767b] font-medium"> Followers</span>
           </div>
         </div>
       </div>

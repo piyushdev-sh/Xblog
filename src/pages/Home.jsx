@@ -99,7 +99,7 @@ function Home() {
               </svg>
               <span className="hidden text-black md:block">Home</span>
             </li>
-            <li className="invert font-sans flex gap-4 py-2 pr-4 pl-2 ml-4 leading-[24px] items-center text-xl w-fit hover:bg-gray-200 hover:rounded-full">
+            <li onClick={() => nav("/home/explore")} className="invert font-sans flex gap-4 py-2 pr-4 pl-2 ml-4 leading-[24px] items-center text-xl w-fit hover:bg-gray-200 hover:rounded-full cursor-pointer">
               <svg
                 viewBox="0 0 24 24"
                 aria-hidden="true"
@@ -113,7 +113,7 @@ function Home() {
               </svg>
               <span className="hidden text-black md:block">Explore</span>
             </li>
-            <li className="invert font-sans flex gap-4 py-2 pr-4 pl-2 ml-4 leading-[24px] items-center text-xl w-fit hover:bg-gray-200 hover:rounded-full">
+            <li onClick={() => nav("/home/bookmarks")} className="invert font-sans flex gap-4 py-2 pr-4 pl-2 ml-4 leading-[24px] items-center text-xl w-fit hover:bg-gray-200 hover:rounded-full cursor-pointer">
               <svg
                 viewBox="0 0 24 24"
                 aria-hidden="true"
@@ -238,7 +238,7 @@ function Home() {
       </div>
 
       <div
-        className={`right relative overflow-auto border-[#2f3336] ${
+        className={`right md:pt-0 relative overflow-auto border-[#2f3336] ${
           isActive("/home") ? "pt-15" : "pt-0"
         } pb-20 border-b-0 border-t-0 w-full md:w-[75%] h-screen overflow-x-hidden scroll-smooth border`}
       >
