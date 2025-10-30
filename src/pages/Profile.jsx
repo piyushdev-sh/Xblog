@@ -256,8 +256,8 @@ async function Submit(data) {
       <div>
         {viewEditProfile ? (
           <div className="fixed inset-0 bg-gray-500/50 z-50  ">
-            <div className="absolute inset-0 top-[10vh] mx-auto bg-black/100 w-[41vw] rounded-2xl h-[80vh]">
-             <div className="top p-3 flex justify-between ">
+            <div className="absolute inset-0 bg-black w-full h-full sm:top-[10vh] sm:w-[70vw] md:w-[50vw] lg:w-[41vw] sm:h-[80vh] sm:rounded-2xl overflow-y-auto">
+             <div className="top p-3 flex justify-between items-center flex-wrap gap-3">
               <div className="flex gap-10 justify-center items-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -326,7 +326,7 @@ async function Submit(data) {
   </label>
   <input type="file" id="profilePicture" accept="image/*" className="hidden" {...register("profilePicture")} />
 </div>
-            <div className="flex flex-col gap-3 w-full p-5">
+            <div className="flex flex-col gap-3 w-full p-3 sm:p-5">
               <div className="border border-[#71767b] p-1">
                 <div dir="ltr" style={{ color: "rgb(113, 118, 123)" }}>
                   <span className="text-sm px-1">Name</span>
