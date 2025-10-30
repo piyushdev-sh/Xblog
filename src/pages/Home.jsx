@@ -240,7 +240,7 @@ function Home() {
       <div
         className={`right md:pt-0 relative overflow-auto border-[#2f3336] ${
           isActive("/home") ? "pt-15" : "pt-0"
-        } pb-20 border-b-0 border-t-0 w-full md:w-[75%] h-screen overflow-x-hidden scroll-smooth border`}
+        } pb-20 border-b-0 border-t-0 w-full md:w-[75%] h-screen overflow-x-hidden scroll-smooth border-0 md:border md:border-y-0`}
       >
         {/* Header for Mobile - Visible only on Home page */}
         {isActive("/home") && (
