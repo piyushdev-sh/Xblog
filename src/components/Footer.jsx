@@ -4,8 +4,7 @@ function Footer() {
     
   const footerItems = [
     "About",
-    "Download the X app",
-    "Grok",
+    "Download the Xblog app",
     "Help Center",
     "Terms of Service",
     "Privacy Policy",
@@ -17,7 +16,7 @@ function Footer() {
     "Brand Resources",
     "Advertising",
     "Marketing",
-    "X for Business",
+    "Xblog for Business",
     "Developers",
     "Settings",
   ];
